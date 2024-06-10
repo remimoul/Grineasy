@@ -1,7 +1,7 @@
 import {View,Text,SafeAreaView,Image,Pressable} from 'react-native';
 import style from '../style';
 
-export default function LoginScreen() {
+export default function HomeScreen({navigation}) {
     return(
         
         <SafeAreaView className="flex-1 items-center bg-white">
@@ -13,6 +13,7 @@ export default function LoginScreen() {
                   title="CONNEXION"
                   style={style.colorPinkBack}
                   className="w-10/12 py-4 mt-4 rounded"
+                  onPress={() => {navigation.navigate('LoginScreen')}}
                 > 
                     <Text className="text-white text-center text-2xl font-bold">CONNEXION</Text>
                 </Pressable>
@@ -21,6 +22,7 @@ export default function LoginScreen() {
                   title="S'INSCRIRE"
                   style={style.colorPinkBack}
                   className="w-10/12 py-4 mt-10 rounded"
+                  onPress={() => {navigation.navigate('RegisterScreen')}}
                 >
                     <Text className="text-white text-center text-2xl font-bold">S'INSCRIRE</Text>
                 </Pressable>
