@@ -6,6 +6,8 @@ import LoginScreen from './LoginScreen';
 import MainContent from './MainContent';
 import { AuthContext } from './AuthProvider';
 
+
+
 const Stack = createNativeStackNavigator();
 
 function MainContentWithAuth() {
@@ -22,7 +24,7 @@ export default function MainApp() {
   const { user } = useContext(AuthContext);
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
         {user ?
           <Stack.Screen name="MainContent" component={MainContentWithAuth} /> :
           <Stack.Screen name="Login" component={LoginScreenWithAuth} />
