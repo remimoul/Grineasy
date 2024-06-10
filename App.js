@@ -1,20 +1,43 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useContext, useEffect } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import LoginScreen from './components/LoginScreen';
+import MainContent from './components/MainContent';
+import { AuthProvider, AuthContext } from './components/AuthProvider';
+import { useNavigation } from '@react-navigation/native';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+const Stack = createNativeStackNavigator();
+
+function MainContentWithAuth() {
+  const { user } = useContext(AuthContext);
+  const navigation = useNavigation(); // Assurez-vous d'importer useNavigation
+
+  useEffect(() => {
+    if (!user) {
+      navigation.navigate('Login');
+    }
+  }, [user, navigation]);
+
+  return user ? <MainContent /> : null;
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+function LoginScreenWithAuth() {
+  const { user } = useContext(AuthContext);
+  return user ? null : <LoginScreen />;
+}
+
+export default function App() {
+  const isLoggedIn = useContext(AuthContext);
+  return (
+    <AuthProvider>
+      <NavigationContainer>
+        <Stack.Navigator>
+          {isLoggedIn ?
+          <Stack.Screen name="MainContent" component={MainContentWithAuth} /> :
+          <Stack.Screen name="Login" component={LoginScreenWithAuth} />
+  }
+        </Stack.Navigator>
+      </NavigationContainer>
+    </AuthProvider>
+  );
+}
