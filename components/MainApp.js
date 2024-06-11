@@ -27,12 +27,13 @@ export default function MainApp() {
       <Stack.Navigator screenOptions={{headerShown: false}}>
              {!user ? (
           <>
+          <Stack.Screen name="HomeScreen" component={HomeScreen} />
             <Stack.Screen name="LoginScreen" component={LoginScreen} />
-            <Stack.Screen name="HomeScreen" component={HomeScreen} />
+            
             <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
           </>
         ) : (
-          <Stack.Screen name="MainContent" component={MainContent} />
+          <Stack.Screen name="MainContent" component={MainContentWithAuth} />
         )}
       </Stack.Navigator>
     </NavigationContainer>
