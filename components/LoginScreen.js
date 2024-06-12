@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
-import { View, Text, SafeAreaView, TextInput, Button, StyleSheet } from 'react-native';
-import style from '../style';
+import React, { useState,useContext } from 'react';
+import { View, Text, SafeAreaView, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { AuthContext } from './AuthProvider';
 
 export default function LoginScreen() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleSignUp = () => {
-        // Ici, vous pouvez ajouter la logique pour envoyer les données d'inscription à votre API
-        console.log('Inscription avec:', email, password);
-    };
+    const { login } = useContext(AuthContext);
+
+    
+const handleSignUp = () => {
+    login(email, password);
+  };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -28,7 +30,9 @@ export default function LoginScreen() {
                 onChangeText={setPassword}
                 secureTextEntry
             />
-            <Button title="Connexion" onPress={handleSignUp} />
+            <TouchableOpacity title="Connexion" onPress={handleSignUp}>
+                <Text>Connexion</Text>
+            </TouchableOpacity>
         </SafeAreaView>
     );
 }
