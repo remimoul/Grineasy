@@ -1,6 +1,8 @@
 import React, { useState,useContext } from 'react';
-import { View, Text, SafeAreaView, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, SafeAreaView, TextInput, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { AuthContext } from './AuthProvider';
+import style from '../style';
+
 
 export default function LoginScreen() {
     const [email, setEmail] = useState('');
@@ -14,46 +16,37 @@ const handleSignUp = () => {
   };
 
     return (
-        <SafeAreaView style={styles.container}>
-            <Text style={[styles.title]}>Connexion</Text>
+        <SafeAreaView >
+            <View className="flex justify-center items-center">
+                <Image source={require('../assets/logo-g.png')} />
+            </View>
+            <View className="items-end">
+
+            <Image className="mr-3" source={require('../assets/Ellipse_h.png')}  />
+        </View>
+        <View className="bg-transparent">
+            <View className="flex justify-center items-center z-20">
+            <Text className="font-bold text-3xl">Bienvenue</Text>
             <TextInput
-                style={styles.input}
+                className="input border border-gray-300 rounded-lg p-2 w-3/4 my-2"
                 placeholder="Email"
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
             />
             <TextInput
-                style={styles.input}
+                className="input border border-gray-300 rounded-lg p-2 w-3/4 my-2"
                 placeholder="Mot de passe"
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
             />
-            <TouchableOpacity title="Connexion" onPress={handleSignUp}>
-                <Text>Connexion</Text>
+            <TouchableOpacity title="Connexion" onPress={handleSignUp} style={style.colorPinkBack} className="w-3/4 py-1 mt-4 rounded">
+                <Text className="text-white text-center text-2xl font-bold">Connexion</Text>
             </TouchableOpacity>
+        </View>
+        </View>
+            <Image className="ml-6 mt-4" source={require('../assets/Ellipse_b.png')}  />
         </SafeAreaView>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'white',
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
-    },
-    input: {
-        width: '80%',
-        height: 40,
-        margin: 12,
-        borderWidth: 1,
-        padding: 10,
-    },
-});
