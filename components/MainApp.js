@@ -41,7 +41,7 @@ function TabNavigator() {
           else if (route.name === 'Profil') iconPath = require('../assets/icon-people.png');
           else if (route.name === 'Journal') iconPath = require('../assets/icon-cal.png');
 
-          return <Image source={iconPath} style={{ width: 40, height: 45 }} />;
+          return <Image source={iconPath} style={{ width: 30, height: 35 }} />;
         },
         tabBarStyle: style.tabBar,
         tabBarShowLabel: false,
