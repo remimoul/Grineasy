@@ -6,8 +6,6 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-
-
   useEffect(() => {
     // Récupérer le token au démarrage de l'application
     const bootstrapAsync = async () => {
@@ -26,50 +24,49 @@ export const AuthProvider = ({ children }) => {
     bootstrapAsync();
   }, []);
 
-
   useEffect(() => {
-  const checkTokenStorage = async () => {
+    const checkTokenStorage = async () => {
+      try {
+        const token = await SecureStore.getItemAsync('userToken');
+        if (token !== null) {
+          console.log('Token found:', token);
+          // Ici, vous pouvez également mettre à jour l'état de l'utilisateur
+          // en fonction du token récupéré si nécessaire.
+        } else {
+          console.log('No token found');
+        }
+      } catch (error) {
+        console.error('Error fetching token from storage:', error);
+      }
+    };
+
+    checkTokenStorage();
+  }, []);
+
+  const login = async (email, password) => {
     try {
-      const token = await SecureStore.getItemAsync('userToken');
-      if (token !== null) {
-        console.log('Token found:', token);
-        // Ici, vous pouvez également mettre à jour l'état de l'utilisateur
-        // en fonction du token récupéré si nécessaire.
+      const response = await fetch('https://grineasy-api-e4fd78b384a5.herokuapp.com/user/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        console.log('Connexion réussie:', data);
+        await SecureStore.setItemAsync('token', JSON.stringify(data));
+        setUser(data);
       } else {
-        console.log('No token found');
+        console.log('Erreur de connexion:', data.message);
       }
     } catch (error) {
-      console.error('Error fetching token from storage:', error);
+      console.error('Erreur lors de la connexion:', error);
     }
   };
-
-  checkTokenStorage();
-}, []);
-
-const login = async (email, password) => {
-  try {
-    const response = await fetch('https://grineasy-api-e4fd78b384a5.herokuapp.com/user/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-    });
-    const data = await response.json();
-    if (response.ok) {
-      console.log('Connexion réussie:', data);
-      await SecureStore.setItemAsync('token', JSON.stringify(data));
-      setUser(data);
-    } else {
-      console.log('Erreur de connexion:', data.message);
-    }
-  } catch (error) {
-    console.error('Erreur lors de la connexion:', error);
-  }
-};
 
   const logout = async () => {
     try {
@@ -80,9 +77,5 @@ const login = async (email, password) => {
     }
   };
 
-  return (
-    <AuthContext.Provider value={{ user, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;
 };
