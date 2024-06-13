@@ -1,5 +1,5 @@
 import { View, Text, SafeAreaView, TouchableOpacity, TextInput, Button, StyleSheet, AppRegistry } from 'react-native';
-import React, { useContext } from 'react';
+import React from 'react';
 import style from '../style';
 
 export default function MainContent() {
