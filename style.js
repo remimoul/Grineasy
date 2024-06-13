@@ -19,4 +19,7 @@ export default StyleSheet.create({
     zIndex: 1,
     marginTop: -5,
   },
+  tabBar: {
+    height: 120,
+  },
 });
