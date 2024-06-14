@@ -20,6 +20,6 @@ export default StyleSheet.create({
     marginTop: -5,
   },
   tabBar: {
-    height: 120,
+    height: 100,
   },
 });

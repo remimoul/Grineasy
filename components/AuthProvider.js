@@ -5,13 +5,14 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [tokenChecked, setTokenChecked] = useState(false);
 
   useEffect(() => {
     // Récupérer le token au démarrage de l'application
     const bootstrapAsync = async () => {
       let userToken;
       try {
-        userToken = await SecureStore.getItemAsync('userToken');
+        userToken = await SecureStore.getItemAsync('token');
         if (userToken) {
           setUser(JSON.parse(userToken)); // Assurez-vous que le token est stocké sous forme de string JSON
         }
@@ -25,23 +26,26 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    const checkTokenStorage = async () => {
-      try {
-        const token = await SecureStore.getItemAsync('userToken');
-        if (token !== null) {
-          console.log('Token found:', token);
-          // Ici, vous pouvez également mettre à jour l'état de l'utilisateur
-          // en fonction du token récupéré si nécessaire.
-        } else {
-          console.log('No token found');
+    if (!tokenChecked) {
+      const checkTokenStorage = async () => {
+        try {
+          const token = await SecureStore.getItemAsync('token');
+          if (token !== null) {
+            console.log('Token found:', token);
+            // Ici, vous pouvez également mettre à jour l'état de l'utilisateur
+            // en fonction du token récupéré si nécessaire.
+          } else {
+            console.log('No token found');
+          }
+        } catch (error) {
+          console.error('Error fetching token from storage:', error);
         }
-      } catch (error) {
-        console.error('Error fetching token from storage:', error);
-      }
-    };
+      };
 
-    checkTokenStorage();
-  }, []);
+      checkTokenStorage();
+      setTokenChecked(true); // Empêche les appels futurs
+    }
+  }, [tokenChecked]); // Dépend de tokenChecked pour éviter les appels répétitifs
 
   const login = async (email, password) => {
     try {
