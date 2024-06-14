@@ -5,6 +5,7 @@ import { Calendar } from 'react-native-calendars';
 import * as SecureStore from 'expo-secure-store';
 import { jwtDecode } from 'jwt-decode';
 import { FontAwesome } from '@expo/vector-icons';
+import Toast from 'react-native-toast-message';
 
 export default function JournalScreen() {
   const [selectedDate, setSelectedDate] = useState('');
@@ -15,6 +16,14 @@ export default function JournalScreen() {
   const [selectedEmotion, setSelectedEmotion] = useState('');
   const [journal, setJournal] = useState([]);
   const emotions = ['Triste', 'En colère', 'Fatigué', 'Heureux', 'Déprimé'];
+
+  const showToast = () => {
+    Toast.show({
+      type: 'success',
+      text1: 'Enregistrer👋',
+      topOffset: 80,
+    });
+  };
 
   useEffect(() => {
     const fetchEmotions = async () => {
@@ -187,7 +196,12 @@ export default function JournalScreen() {
           />
 
           <View className="flex flex-row mt-7">
-            <TouchableOpacity onPress={saveEntry}>
+            <TouchableOpacity
+              onPress={() => {
+                saveEntry();
+                showToast();
+              }}
+            >
               <Text>
                 <FontAwesome name="save" size={40} color="#53BECA" />
               </Text>
@@ -202,8 +216,6 @@ export default function JournalScreen() {
           <Text className="text-lg mt-4">Emotions cette journée</Text>
 
           {journal.length > 0 && selectedDate ? (
-
-            
             <View className="flex flex-col">
               {journal.map((entry, index) => (
                 <View key={index}>
@@ -230,6 +242,7 @@ export default function JournalScreen() {
           )}
         </View>
       </Modal>
+      <Toast />
     </SafeAreaView>
   );
 }
