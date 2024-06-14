@@ -14,6 +14,7 @@ import ChatScreen from './ChatScreen';
 import NotifScreen from './NotifScreen';
 import ProfilScreen from './ProfilScreen';
 import style from '../style';
+import { FontAwesome } from '@expo/vector-icons';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -32,17 +33,23 @@ function TabNavigator() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, size }) => {
-          let iconPath;
+        tabBarIcon: ({ focused, color, size }) => {
+          let name = 'asterisk';
+          let iconHome;
+          if (route.name === 'Chat') name = 'envelope';
+          else if (route.name === 'Journal') name = 'calendar';
+          else if (route.name === 'MainContent') iconHome = require('../assets/logo-g.png');
+          else if (route.name === 'Notif') name = 'bell';
+          else if (route.name === 'Profil') name = 'user';
 
-          if (route.name === 'MainContent') iconPath = require('../assets/logo-g.png');
-          else if (route.name === 'Chat') iconPath = require('../assets/icon-msg.png');
-          else if (route.name === 'Notif') iconPath = require('../assets/icon-notif.png');
-          else if (route.name === 'Profil') iconPath = require('../assets/icon-people.png');
-          else if (route.name === 'Journal') iconPath = require('../assets/icon-cal.png');
-
-          return <Image source={iconPath} style={{ width: 30, height: 35 }} />;
+          if (route.name === 'MainContent') {
+            return <Image source={iconHome} style={{ width: 35, height: 35 }} />;
+          } else {
+            return <FontAwesome name={name} size={30} color={color} />;
+          }
         },
+        tabBarActiveTintColor: '#53BECA',
+        tabBarInactiveTintColor: '#333333',
         tabBarStyle: style.tabBar,
         tabBarShowLabel: false,
       })}
