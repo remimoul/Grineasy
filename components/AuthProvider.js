@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import * as SecureStore from 'expo-secure-store';
+import {API_URL} from '@env';
 
 export const AuthContext = createContext();
 
@@ -49,7 +50,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await fetch('https://grineasy-api-e4fd78b384a5.herokuapp.com/user/login', {
+      const response = await fetch(`${API_URL}/user/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
