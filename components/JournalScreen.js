@@ -7,6 +7,8 @@ import { jwtDecode } from 'jwt-decode';
 import Toast from 'react-native-toast-message';
 import { BarChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
+import {API_URL} from '@env';
 
 export default function JournalScreen() {
   const [selectedDate, setSelectedDate] = useState('');
@@ -73,7 +75,7 @@ export default function JournalScreen() {
         const decoded = jwtDecode(tokenResponse); // Décoder le token
         const user_id = decoded.id;
 
-        const response = await fetch(`https://grineasy-api-e4fd78b384a5.herokuapp.com/journal/get/${user_id}`, {
+        const response = await fetch(`${API_URL}/journal/get/${user_id}`, {
           method: 'GET',
           headers: {
             Authorization: token,
@@ -144,7 +146,7 @@ export default function JournalScreen() {
         return;
       }
 
-      const response = await fetch('https://grineasy-api-e4fd78b384a5.herokuapp.com/journal/send', {
+      const response = await fetch(`${API_URL}/journal/send`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
