@@ -43,12 +43,6 @@ export default function MainContent() {
         </Text>
       </View>
 
-      <View className="flex mt-2 rounded-xl p-3" style={style.colorBlueBackCustom}>
-        <Text className="text-center " style={{ fontSize: 65 }}>
-          🙂​🙁​😥​😠​😨​
-        </Text>
-      </View>
-
       <View className="flex flex-row mt-4 mx-3">
         <View className="w-1/2 rounded-xl p-2" style={style.colorBlueBack}>
           <Text className="text-center mt-5 font-bold">Analyse du sommeil</Text>
@@ -57,7 +51,7 @@ export default function MainContent() {
             <Image source={require('../assets/woman.png')} />
           </View>
           <TouchableOpacity className="rounded-xl p-2 mt-2" style={style.colorTurquoiseBack}>
-            <Text className="text-center text-white">Savoir plus</Text>
+            <Text className="text-center text-white">Bientôt Disponible</Text>
           </TouchableOpacity>
         </View>
 
@@ -68,7 +62,7 @@ export default function MainContent() {
             <Image source={require('../assets/womanmedit.png')} />
           </View>
           <TouchableOpacity className="rounded-xl p-2 mt-2" style={style.colorTurquoiseBack}>
-            <Text className="text-center text-white">Commencer</Text>
+            <Text className="text-center text-white">Bientôt Disponible</Text>
           </TouchableOpacity>
         </View>
       </View>
