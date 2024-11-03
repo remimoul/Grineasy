@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, SafeAreaView, TextInput, TouchableOpacity, Image, Button, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import style from '../style';
+import { API_URL } from '@env';
 
 export default function RegisterScreen() {
   const [showOptions, setShowOptions] = useState(false);
@@ -18,7 +19,7 @@ export default function RegisterScreen() {
   const register = async () => {
     let data;
     try {
-      const response = await fetch('https://grineasy-api-e4fd78b384a5.herokuapp.com/user/register', {
+      const response = await fetch(`${API_URL}/user/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
