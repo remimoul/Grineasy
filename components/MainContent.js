@@ -32,7 +32,7 @@ export default function MainContent() {
 
   return (
     <SafeAreaView className="flex-1 items-center bg-white">
-      <Text style={[{ marginTop: 16, fontSize: 24, fontWeight: 'bold' }, style.colorTurquoise]}>Bonjour,  </Text>
+      <Text style={[{ marginTop: 16, fontSize: 24, fontWeight: 'bold' }, style.colorTurquoise]}>Bonjour, </Text>
       <View className="rounded-xl p-2 mt-5" style={style.colorTurquoiseBack}>
         <Text className="font-bold text-lg ">{today}</Text>
       </View>

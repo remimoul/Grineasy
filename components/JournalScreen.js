@@ -8,7 +8,8 @@ import Toast from 'react-native-toast-message';
 import { BarChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import {API_URL} from '@env';
+import { API_URL } from '@env';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function JournalScreen() {
   const [selectedDate, setSelectedDate] = useState('');
@@ -99,8 +100,6 @@ export default function JournalScreen() {
     fetchEmotions();
   }, []);
 
-
-  
   // Fonction pour gérer le clic sur un jour du calendrier
   const handleDayPress = (day) => {
     const currentDate = new Date();
@@ -249,30 +248,43 @@ export default function JournalScreen() {
           <Text className="text-lg mt-4">Emotions</Text>
 
           {journal.data && journal.data.length > 0 && selectedDate ? (
-  <View className="flex flex-col">
-    {journal.data.map((entry, index) => (
-      <View key={index}>
-        <Text className="text-sm">{entry.emotion}</Text>
-      </View>
-    ))}
-  </View>
-) : (
-  <Text className="text-sm">Aucune emotion enregistrer ce jour</Text>
-)}
+            <View className="flex flex-col w-full">
+              {journal.data.map((entry, index) => (
+                <View key={index} className="flex flex-row items-center mb-2 px-3 w-full">
+                  <Text className="text-sm flex-1">{entry.emotion}</Text>
+                  <TouchableOpacity onPress={() => handleUpdate(entry.id)} className="ml-2">
+                    <Icon name="edit" size={22} color="#53BECA" />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => handleDelete(entry.id)} className="ml-2">
+                    <Icon name="trash" size={22} color="red" />
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </View>
+          ) : (
+            <Text className="text-sm">Aucune emotion enregistrer ce jour</Text>
+          )}
 
-<Text className="text-lg mt-2">Pensées</Text>
+          <Text className="text-lg mt-2">Pensées</Text>
 
-{journal.data && journal.data.length > 0 && selectedDate ? (
-  <View className="flex flex-col">
-    {journal.data.map((entry, index) => (
-      <View key={index}>
-        <Text className="text-sm">{entry.thoughts}</Text>
-      </View>
-    ))}
-  </View>
-) : (
-  <Text className="text-sm">Aucune pensées enregistrer ce jour</Text>
-)}
+          {journal.data && journal.data.length > 0 && selectedDate ? (
+            <View className="flex flex-col w-full">
+              {journal.data.map((entry, index) => (
+                <View key={index} className="flex flex-row items-center mb-2 px-3 w-full">
+                  <Text className="text-sm flex-1">{entry.thoughts}</Text>
+                  <TouchableOpacity onPress={() => handleUpdate(entry.id)} className="ml-2">
+                    <Icon name="edit" size={22} color="#53BECA" />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => handleDelete(entry.id)} className="ml-2">
+                    <Icon name="trash" size={22} color="red" />
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </View>
+          ) : (
+            <Text className="text-sm">Aucune pensées enregistrer ce jour</Text>
+          )}
+
           <View className="flex flex-row mt-7">
             <TouchableOpacity
               onPress={() => {
