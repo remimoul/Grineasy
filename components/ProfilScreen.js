@@ -18,21 +18,31 @@ export default function ProfilScreen() {
 
 
 <View className="px-5 w-full">
-      <View style={styles.tableContainer}>
+      <View className="mt-5">
         <View style={styles.tableRow}>
+          
           <Text style={styles.tableHeader}>Nom</Text>
-          <Text style={styles.tableCell}>John Doe</Text>
+         <TouchableOpacity>
+          <Icon name='angle-right' size={32} margin={5} />
+         </TouchableOpacity>
         </View>
         <View style={styles.tableRow}>
           <Text style={styles.tableHeader}>Email</Text>
-          <Text style={styles.tableCell}>johndoe@example.com</Text>
+          <TouchableOpacity>
+          <Icon name='angle-right' size={32} margin={5} />
+         </TouchableOpacity>
         </View>
         <View style={styles.tableRow}>
           <Text style={styles.tableHeader}>Password</Text>
-          <Text style={styles.tableCell}>********</Text>
+          <TouchableOpacity>
+          <Icon name='angle-right' size={32} margin={5} />
+         </TouchableOpacity>
         </View>
         <View style={styles.tableRow}>
           <Text style={styles.tableHeader}>Avatar</Text>
+          <TouchableOpacity>
+          <Icon name='angle-right' size={32} margin={5} />
+         </TouchableOpacity>
         </View>
       </View>
 
@@ -83,14 +93,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
   },
-  tableContainer: {
-    width: '90%',
-    marginVertical: 20,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 5,
-    overflow: 'hidden',
-  },
   tableRow: {
     flexDirection: 'row',
     borderBottomWidth: 1,
@@ -99,15 +101,10 @@ const styles = StyleSheet.create({
   tableHeader: {
     flex: 1,
     padding: 10,
-    backgroundColor: '#f5f5f5',
     fontWeight: 'bold',
-    borderRightWidth: 1,
-    borderRightColor: '#ddd',
   },
   tableCell: {
     flex: 2,
     padding: 10,
-    borderRightWidth: 1,
-    borderRightColor: '#ddd',
   },
 });
