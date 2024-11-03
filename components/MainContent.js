@@ -3,24 +3,56 @@ import React, { useState, useEffect } from 'react';
 import style from '../style';
 import { jwtDecode } from 'jwt-decode';
 import * as SecureStore from 'expo-secure-store';
+import { API_URL } from '@env';
 
 export default function MainContent() {
   const [userName, setUserName] = useState('');
 
-  useEffect(() => {
-    const fetchToken = async () => {
-      const token = await SecureStore.getItemAsync('token');
-      if (token) {
-        // Ensure token is not null or undefined
-        const decoded = jwtDecode(token); // Now passing the actual token string
-        const name = decoded.firstName; // Obtenez le nom de l'utilisateur
-        setUserName(name); // Mettez à jour l'état avec le nom de l'utilisateur
-      }
-    };
+  // useEffect(() => {
+  //   const fetchToken = async () => {
+  //     const token = await SecureStore.getItemAsync('token');
+  //     if (token) {
+  //       // Ensure token is not null or undefined
+  //       const decoded = jwtDecode(token); // Now passing the actual token string
+  //       const name = decoded.firstName; // Obtenez le nom de l'utilisateur
+  //       setUserName(name); // Mettez à jour l'état avec le nom de l'utilisateur
+  //     }
+  //   };
 
-    fetchToken();
-    console.log('userName:', userName);
-  }, [userName]);
+  //   fetchToken();
+  //   console.log('userName:', userName);
+  // }, [userName]);
+
+  const fetchToken = async () => {
+    const tokenResponse = await SecureStore.getItemAsync('token');
+    // Parser la réponse pour obtenir le token en string
+    const { token } = JSON.parse(tokenResponse);
+    const decoded = jwtDecode(tokenResponse); // Décoder le token
+    const user_id = decoded.id;
+    if (!token) {
+      console.error('Token property not found in response');
+      return;
+    }
+    if (token) {
+      const response = await fetch(`${API_URL}/user/get/${user_id}`, {
+        method: 'GET',
+        headers: {
+          Authorization: token,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const name = data.firstName; // Assurez-vous que la réponse contient le prénom de l'utilisateur
+        setUserName(name); // Mettez à jour l'état avec le nom de l'utilisateur
+      } else {
+        console.error('Failed to fetch user data');
+      }
+    }
+  };
+
+  fetchToken();
 
   // Formattez la date comme exemple "jeudi 16 juin 2024"
   const today = new Date().toLocaleDateString('fr-FR', {
@@ -32,7 +64,7 @@ export default function MainContent() {
 
   return (
     <SafeAreaView className="flex-1 items-center bg-white">
-      <Text style={[{ marginTop: 16, fontSize: 24, fontWeight: 'bold' }, style.colorTurquoise]}>Bonjour, </Text>
+      <Text style={[{ marginTop: 16, fontSize: 24, fontWeight: 'bold' }, style.colorTurquoise]}>Bonjour, {userName}</Text>
       <View className="rounded-xl p-2 mt-5" style={style.colorTurquoiseBack}>
         <Text className="font-bold text-lg ">{today}</Text>
       </View>
