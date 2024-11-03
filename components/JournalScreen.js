@@ -91,14 +91,16 @@ export default function JournalScreen() {
         setJournal(data);
         // const emotions = data.map((entry) => entry.emotion);
         // console.log('Émotions récupérées:', emotions);
+        console.log('Journal:', data);
       } catch (error) {
         console.error(error.message);
       }
     };
-
     fetchEmotions();
-  }, [journal]);
+  }, []);
 
+
+  
   // Fonction pour gérer le clic sur un jour du calendrier
   const handleDayPress = (day) => {
     const currentDate = new Date();
@@ -108,6 +110,7 @@ export default function JournalScreen() {
       setSelectedDate(day.dateString);
       setIsModalVisible(true);
       setUserInput(entries[day.dateString]?.thoughts || '');
+      setSelectedEmotion(entries[day.dateString]?.emotion || '');
     } else {
       // Afficher un message d'erreur ou ne rien faire
       console.error('Vous ne pouvez ajouter une émotion que pour le jour en cours.');
@@ -245,31 +248,31 @@ export default function JournalScreen() {
           </Text>
           <Text className="text-lg mt-4">Emotions</Text>
 
-          {journal.length > 0 && selectedDate ? (
-            <View className="flex flex-col">
-              {journal.map((entry, index) => (
-                <View key={index}>
-                  <Text className="text-sm-">{entry.emotion}</Text>
-                </View>
-              ))}
-            </View>
-          ) : (
-            <Text className="text-sm">Aucune emotion enregistrer ce jour</Text>
-          )}
+          {journal.data && journal.data.length > 0 && selectedDate ? (
+  <View className="flex flex-col">
+    {journal.data.map((entry, index) => (
+      <View key={index}>
+        <Text className="text-sm">{entry.emotion}</Text>
+      </View>
+    ))}
+  </View>
+) : (
+  <Text className="text-sm">Aucune emotion enregistrer ce jour</Text>
+)}
 
-          <Text className="text-lg mt-2">Pensées</Text>
+<Text className="text-lg mt-2">Pensées</Text>
 
-          {journal.length > 0 && selectedDate ? (
-            <View className="flex flex-col">
-              {journal.map((entry, index) => (
-                <View key={index}>
-                  <Text className="text-sm">{entry.thoughts}</Text>
-                </View>
-              ))}
-            </View>
-          ) : (
-            <Text className="text-sm">Aucune pensées enregistrer ce jour</Text>
-          )}
+{journal.data && journal.data.length > 0 && selectedDate ? (
+  <View className="flex flex-col">
+    {journal.data.map((entry, index) => (
+      <View key={index}>
+        <Text className="text-sm">{entry.thoughts}</Text>
+      </View>
+    ))}
+  </View>
+) : (
+  <Text className="text-sm">Aucune pensées enregistrer ce jour</Text>
+)}
           <View className="flex flex-row mt-7">
             <TouchableOpacity
               onPress={() => {
