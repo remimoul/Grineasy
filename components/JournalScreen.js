@@ -162,15 +162,70 @@ export default function JournalScreen() {
         }),
       });
       if (response.ok) {
+        const newEntry = await response.json();
+              // Mettre à jour l'état du journal après l'ajout
+      setJournal((prevJournal) => ({
+        ...prevJournal,
+        data: [
+          ...prevJournal.data,
+          newEntry,
+        ],
+      }));
+
         setEntries({ ...entries, [selectedDate]: selectedEmotion });
         setIsModalVisible(false);
+        console.log('Entrée ajoutée avec succès');
       } else {
         console.error('An error occurred while saving the entry-1-');
       }
+
+
+
     } catch (error) {
-      console.error('An error occurred while saving the entry-2-');
+      console.error('An error occurred while saving the entry');
     }
   };
+
+  const handleDelete = async (id) => {
+    try {
+      const tokenResponse = await SecureStore.getItemAsync('token');
+      const decoded = jwtDecode(tokenResponse); // Décoder le token
+      const user_id = decoded.id;
+      if (!tokenResponse) {
+        console.error('Token not found');
+        return;
+      }
+      const { token } = JSON.parse(tokenResponse);
+      if (!token) {
+        console.error('Token property not found in response');
+        return;
+      }
+  
+      const response = await fetch(`${API_URL}/journal/delete/${user_id}/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: token,
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error('Erreur lors de la suppression de l\'entrée');
+      }
+  
+      // Mettre à jour l'état du journal après la suppression
+      setJournal((prevJournal) => ({
+        ...prevJournal,
+        data: prevJournal.data.filter((entry) => entry.id !== id),
+      }));
+  
+      console.log('Entrée supprimée avec succès');
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+
   return (
     <SafeAreaView className="flex-1 items-center bg-white">
       <Text style={[{ fontSize: 24, fontWeight: 'bold', marginBottom: 15 }, style.colorTurquoise]}>Journal Emotionnel</Text>
@@ -252,9 +307,9 @@ export default function JournalScreen() {
               {journal.data.map((entry, index) => (
                 <View key={index} className="flex flex-row items-center mb-2 px-3 w-full">
                   <Text className="text-sm flex-1">{entry.emotion}</Text>
-                  <TouchableOpacity onPress={() => handleUpdate(entry.id)} className="ml-2">
+                  {/* <TouchableOpacity onPress={() => handleUpdate(entry.id)} className="ml-2">
                     <Icon name="edit" size={22} color="#53BECA" />
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                   <TouchableOpacity onPress={() => handleDelete(entry.id)} className="ml-2">
                     <Icon name="trash" size={22} color="red" />
                   </TouchableOpacity>
@@ -272,12 +327,12 @@ export default function JournalScreen() {
               {journal.data.map((entry, index) => (
                 <View key={index} className="flex flex-row items-center mb-2 px-3 w-full">
                   <Text className="text-sm flex-1">{entry.thoughts}</Text>
-                  <TouchableOpacity onPress={() => handleUpdate(entry.id)} className="ml-2">
+                  {/* <TouchableOpacity onPress={() => handleUpdate(entry.id)} className="ml-2">
                     <Icon name="edit" size={22} color="#53BECA" />
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => handleDelete(entry.id)} className="ml-2">
                     <Icon name="trash" size={22} color="red" />
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                 </View>
               ))}
             </View>
