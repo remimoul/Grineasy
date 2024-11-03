@@ -2,38 +2,47 @@ import { View, Text, SafeAreaView, TouchableOpacity, TextInput, Button, StyleShe
 import React, { useContext } from 'react';
 import style from '../style';
 import { AuthContext } from './AuthProvider';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 export default function ProfilScreen() {
   const { logout } = useContext(AuthContext);
   return (
     <SafeAreaView className="flex-1 items-center bg-white">
-      <Text style={[{ marginTop: 16, fontSize: 24, fontWeight: 'bold' }, style.colorTurquoise]}>Profil</Text>
-
-      <View style={styles.infoContainer}>
-        <Text style={styles.infoText}>Nom: John Doe</Text>
-        <Text style={styles.infoText}>Email: johndoe@example.com</Text>
-        <Text style={styles.infoText}>Téléphone: 1234567890</Text>
-        <Text style={styles.infoText}>Date de Naissance: 01/01/2000</Text>
-        <Text style={styles.infoText}>Entreprise: Orange</Text>
+      <View className="flex flex-row items-center px-5">
+      <Text className="px-7" style={[{ fontSize: 35, fontWeight: 'bold' }, style.colorTurquoise]}>Profil</Text>
+      <TouchableOpacity className="rounded-xl p-2" style={style.colorBlueBack}>
+            <Text className="text-center text-white">Déconnexion</Text>
+          </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.button}>
+
+
+<View className="px-5 w-full">
+      <View style={styles.tableContainer}>
+        <View style={styles.tableRow}>
+          <Text style={styles.tableHeader}>Nom</Text>
+          <Text style={styles.tableCell}>John Doe</Text>
+        </View>
+        <View style={styles.tableRow}>
+          <Text style={styles.tableHeader}>Email</Text>
+          <Text style={styles.tableCell}>johndoe@example.com</Text>
+        </View>
+        <View style={styles.tableRow}>
+          <Text style={styles.tableHeader}>Password</Text>
+          <Text style={styles.tableCell}>********</Text>
+        </View>
+        <View style={styles.tableRow}>
+          <Text style={styles.tableHeader}>Avatar</Text>
+        </View>
+      </View>
+
+      {/* <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Modifier le Profil</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Changer le Mot de Passe</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        onPress={logout}
-        style={{
-          marginTop: 20,
-          backgroundColor: 'turquoise',
-          padding: 10,
-          borderRadius: 5,
-        }}
-      >
-        <Text style={{ color: 'white', fontSize: 16 }}>Déconnexion</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
+      </View>
     </SafeAreaView>
   );
 }
@@ -73,5 +82,32 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontSize: 16,
+  },
+  tableContainer: {
+    width: '90%',
+    marginVertical: 20,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 5,
+    overflow: 'hidden',
+  },
+  tableRow: {
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+  },
+  tableHeader: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: '#f5f5f5',
+    fontWeight: 'bold',
+    borderRightWidth: 1,
+    borderRightColor: '#ddd',
+  },
+  tableCell: {
+    flex: 2,
+    padding: 10,
+    borderRightWidth: 1,
+    borderRightColor: '#ddd',
   },
 });

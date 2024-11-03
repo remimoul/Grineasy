@@ -15,6 +15,10 @@ export default StyleSheet.create({
     color: '#53BECA',
   },
 
+  colorBlueBack: {
+    backgroundColor: '#53BECA',
+  },
+
   colorPinkBack: {
     backgroundColor: '#D2BDDD',
   },
