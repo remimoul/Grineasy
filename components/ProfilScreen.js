@@ -1,11 +1,24 @@
-import { View, Text, SafeAreaView, TouchableOpacity, TextInput, Button, StyleSheet } from 'react-native';
-import React, { useContext } from 'react';
+import { View, Text, SafeAreaView, TouchableOpacity, TextInput, Button, StyleSheet,Modal } from 'react-native';
+import React, { useContext , useState} from 'react';
 import style from '../style';
 import { AuthContext } from './AuthProvider';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import EditFieldModal from './EditFieldModal';
 
 export default function ProfilScreen() {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [currentField, setCurrentField] = useState('');
+  const [fieldValue, setFieldValue] = useState('');
+
+  const openModal = (field, value) => {
+    setCurrentField(field);
+    setFieldValue(value);
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
   const { logout } = useContext(AuthContext);
   return (
     <SafeAreaView className="flex-1 items-center bg-white">
@@ -20,31 +33,47 @@ export default function ProfilScreen() {
 <View className="px-5 w-full">
       <View className="mt-5">
         <View style={styles.tableRow}>
-          
           <Text style={styles.tableHeader}>Nom</Text>
          <TouchableOpacity>
           <Icon name='angle-right' size={32} margin={5} />
          </TouchableOpacity>
         </View>
         <View style={styles.tableRow}>
+          <Text style={styles.tableHeader}>Prénom</Text>
+         <TouchableOpacity>
+          <Icon name='angle-right' size={32} margin={5} />
+         </TouchableOpacity>
+        </View>
+        <View style={styles.tableRow}>
           <Text style={styles.tableHeader}>Email</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=> openModal('email', '')}>
           <Icon name='angle-right' size={32} margin={5} />
          </TouchableOpacity>
         </View>
         <View style={styles.tableRow}>
           <Text style={styles.tableHeader}>Password</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=> openModal('le mot de passe', '')}>
           <Icon name='angle-right' size={32} margin={5} />
          </TouchableOpacity>
         </View>
+  
         <View style={styles.tableRow}>
+          <Text style={styles.tableHeader}>Role</Text>
+          <Text style={styles.tableCell}>********</Text>
+        </View>
+        <View style={styles.tableRow}>
+          <Text style={styles.tableHeader}>Entreprise</Text>
+          <Text style={styles.tableCell}>********</Text>
+        </View>
+      </View>
+
+
+      {/* <View style={styles.tableRow}>
           <Text style={styles.tableHeader}>Avatar</Text>
           <TouchableOpacity>
           <Icon name='angle-right' size={32} margin={5} />
          </TouchableOpacity>
-        </View>
-      </View>
+        </View> */}
 
       {/* <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Modifier le Profil</Text>
@@ -52,6 +81,19 @@ export default function ProfilScreen() {
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Changer le Mot de Passe</Text>
       </TouchableOpacity> */}
+            <EditFieldModal
+        visible={modalVisible}
+        onClose={closeModal}
+        field={currentField}
+        value={fieldValue}
+        onChange={setFieldValue}
+      />
+<View className="mt-64 bottom-0"> 
+  <TouchableOpacity>
+            <Text className="text-center text-red-600">Supprimer mon compte</Text>
+          </TouchableOpacity>
+</View>
+
       </View>
     </SafeAreaView>
   );
@@ -106,5 +148,33 @@ const styles = StyleSheet.create({
   tableCell: {
     flex: 2,
     padding: 10,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+    fontSize: 20,
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 15,
+    width: '100%',
+    paddingHorizontal: 10,
   },
 });
