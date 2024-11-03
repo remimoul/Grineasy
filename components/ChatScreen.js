@@ -11,7 +11,7 @@ export default function ChatScreen() {
         <View style={styles.chatInputContainer}>
           <TextInput style={styles.chatInput} placeholder="Tapez votre message ici..." />
           <TouchableOpacity style={styles.sendButton} onPress={() => console.log('Message envoyé')}>
-            <Text style={styles.sendButtonText}>Envoyer</Text>
+            <Text style={styles.sendButtonText}>Bientôt Disponible</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -36,7 +36,8 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
   },
   sendButton: {
-    backgroundColor: '#007bff', // Example button color
+    // backgroundColor: '#007bff', // Example button color
+    backgroundColor: 'gray',
     padding: 10,
     borderRadius: 4,
   },
