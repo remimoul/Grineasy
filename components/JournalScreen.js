@@ -162,25 +162,12 @@ export default function JournalScreen() {
         }),
       });
       if (response.ok) {
-        const newEntry = await response.json();
-              // Mettre à jour l'état du journal après l'ajout
-      setJournal((prevJournal) => ({
-        ...prevJournal,
-        data: [
-          ...prevJournal.data,
-          newEntry,
-        ],
-      }));
-
         setEntries({ ...entries, [selectedDate]: selectedEmotion });
         setIsModalVisible(false);
         console.log('Entrée ajoutée avec succès');
       } else {
         console.error('An error occurred while saving the entry-1-');
       }
-
-
-
     } catch (error) {
       console.error('An error occurred while saving the entry');
     }
@@ -200,7 +187,7 @@ export default function JournalScreen() {
         console.error('Token property not found in response');
         return;
       }
-  
+
       const response = await fetch(`${API_URL}/journal/delete/${user_id}/${id}`, {
         method: 'DELETE',
         headers: {
@@ -208,23 +195,20 @@ export default function JournalScreen() {
           'Content-Type': 'application/json',
         },
       });
-  
+
       if (!response.ok) {
-        throw new Error('Erreur lors de la suppression de l\'entrée');
+        throw new Error("Erreur lors de la suppression de l'entrée");
       }
-  
+
       // Mettre à jour l'état du journal après la suppression
       setJournal((prevJournal) => ({
         ...prevJournal,
         data: prevJournal.data.filter((entry) => entry.id !== id),
       }));
-  
-      console.log('Entrée supprimée avec succès');
     } catch (error) {
       console.error(error.message);
     }
   };
-
 
   return (
     <SafeAreaView className="flex-1 items-center bg-white">
@@ -358,7 +342,6 @@ export default function JournalScreen() {
           </View>
         </View>
       </Modal>
-
       <Toast />
     </SafeAreaView>
   );
