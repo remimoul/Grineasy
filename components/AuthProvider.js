@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import { API_URL } from '@env';
+import Toast from 'react-native-toast-message';
 
 export const AuthContext = createContext();
 
@@ -63,13 +64,37 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
       if (response.ok) {
         console.log('Connexion réussie:', data);
+        Toast.show({
+          type: 'success',
+          text1: 'Connexion réussie',
+          text2: data.message,
+          text1Style: { fontSize: 18 },
+          text2Style: { fontSize: 16 },
+          topOffset: 80,
+        });
         await SecureStore.setItemAsync('token', JSON.stringify(data));
         setUser(data);
       } else {
         console.log('Erreur de connexion:', data.message);
+        Toast.show({
+          type: 'error',
+          text1: 'Erreur de connexion',
+          text2: data.message,
+          text1Style: { fontSize: 18 },
+          text2Style: { fontSize: 16 },
+          topOffset: 80,
+        });
       }
     } catch (error) {
       console.error('Erreur lors de la connexion:', error);
+      Toast.show({
+        type: 'error',
+        text1: 'Erreur lors de la connexion',
+        text2: error.message,
+        text1Style: { fontSize: 18 },
+        text2Style: { fontSize: 16 },
+        topOffset: 80,
+      });
     }
   };
 
@@ -79,6 +104,14 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
     } catch (e) {
       console.error('Deleting token failed', e);
+      Toast.show({
+        type: 'error',
+        text1: 'Erreur de déconnexion',
+        text2: e.message,
+        text1Style: { fontSize: 18 },
+        text2Style: { fontSize: 16 },
+        topOffset: 80,
+      });
     }
   };
 
