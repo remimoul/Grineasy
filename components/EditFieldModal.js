@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Modal, TextInput, Button, StyleSheet, SafeAreaView, Alert } from 'react-native';
+import { View, Text, Modal, TextInput, Button, StyleSheet, SafeAreaView, Alert, TouchableOpacity } from 'react-native';
 import { API_URL } from '@env';
 import { jwtDecode } from 'jwt-decode';
 import * as SecureStore from 'expo-secure-store';
@@ -48,68 +48,38 @@ const EditFieldModal = ({ visible, onClose, field, value, onChange }) => {
 
   return (
     <SafeAreaView>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={visible}
-        onRequestClose={onClose}
-      >
-        <View style={styles.modalView}>
-          <Text style={styles.modalText}>Modifier {field}</Text>
+      <Modal animationType="slide" transparent={true} visible={visible} onRequestClose={onClose}>
+        <View className="items-center rounded-xl h-auto py-6 mx-12 my-16 bg-gray-100">
+          <Text className="text-lg mt-5 font-bold text-cyan-500">Modifier {field}</Text>
           <TextInput
-            style={styles.input}
+            className="input border border-gray-300 rounded-lg p-2 w-3/4 my-2"
             value={fieldValue}
             onChangeText={setFieldValue}
-            placeholder={`Enter new ${field}`}
+            placeholder={`Entrer un nouveau ${field}`}
+            placeholderTextColor="#888"
             secureTextEntry={field === 'password'}
           />
-                    {field === 'password' && (
+          {field === 'password' && (
             <TextInput
-              style={styles.input}
+              className="input border border-gray-300 rounded-lg p-2 w-3/4 my-2"
               value={confirmPassword}
               onChangeText={setConfirmPassword}
-              placeholder="Confirm new password"
+              placeholderTextColor="#888"
+              placeholder="Confirmer le mot de passe"
               secureTextEntry={true}
             />
           )}
-          <Button title="Enregistrer" style={styles.buttonText} onPress={updateUser} />
-          <Button title="Annuler" onPress={onClose} />
+          <TouchableOpacity className="mt-4 p-3 rounded-lg bg-cyan-500" onPress={updateUser}>
+            <Text className="text-center text-white">Mettre à jour</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={onClose}>
+            <Text className="mt-8 text-center text-red-600">Fermer</Text>
+          </TouchableOpacity>
         </View>
       </Modal>
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  modalView: {
-    marginTop: 60,
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-    fontSize: 20,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 15,
-    width: '100%',
-    paddingHorizontal: 10,
-  },
-});
 
 export default EditFieldModal;
