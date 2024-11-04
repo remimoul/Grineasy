@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Modal, TextInput, Button, StyleSheet, SafeAreaView, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, Modal, TextInput, SafeAreaView, Alert, TouchableOpacity } from 'react-native';
 import { API_URL } from '@env';
 import { jwtDecode } from 'jwt-decode';
 import * as SecureStore from 'expo-secure-store';

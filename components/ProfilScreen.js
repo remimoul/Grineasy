@@ -1,20 +1,25 @@
-import { View, Text, SafeAreaView, TouchableOpacity, TextInput, Button, StyleSheet, Modal } from 'react-native';
-import React, { useContext, useState } from 'react';
+import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useContext, useState, useEffect } from 'react';
 import style from '../style';
 import { AuthContext } from './AuthProvider';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import EditFieldModal from './EditFieldModal';
+import { jwtDecode } from 'jwt-decode';
+import * as SecureStore from 'expo-secure-store';
+import { API_URL } from '@env';
 
 export default function ProfilScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [currentField, setCurrentField] = useState('');
   const [fieldValue, setFieldValue] = useState('');
+  const [getDataProfil, setDataProfil] = useState('');
   const [profileData, setProfileData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     password: '',
   });
+
   const openModal = (field) => {
     setCurrentField(field);
     setFieldValue(profileData[field]);
@@ -32,6 +37,42 @@ export default function ProfilScreen() {
     }));
   };
   const { logout } = useContext(AuthContext);
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      const tokenResponse = await SecureStore.getItemAsync('token');
+      const { token } = JSON.parse(tokenResponse);
+      const decoded = jwtDecode(tokenResponse);
+      const userId = decoded.id;
+
+      try {
+        const response = await fetch(`${API_URL}/user/get/${userId}`, {
+          method: 'GET',
+          headers: {
+            Authorization: token,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setDataProfil({
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            role: data.role,
+            company_name: data.company_name,
+          });
+        } else {
+          console.error('Failed to fetch profile data');
+        }
+      } catch (error) {
+        console.error('An error occurred while fetching profile data:', error);
+      }
+    };
+
+    fetchProfileData();
+  }, []);
   return (
     <SafeAreaView className="flex-1 items-center bg-white">
       <View className="flex flex-row items-center px-5">
@@ -47,18 +88,21 @@ export default function ProfilScreen() {
         <View className="mt-5">
           <View style={styles.tableRow}>
             <Text style={styles.tableHeader}>Nom</Text>
+            <Text style={styles.tableCell}>{getDataProfil.lastName}</Text>
             <TouchableOpacity onPress={() => openModal('lastName')}>
               <Icon name="angle-right" size={32} margin={5} />
             </TouchableOpacity>
           </View>
           <View style={styles.tableRow}>
             <Text style={styles.tableHeader}>Prénom</Text>
+            <Text style={styles.tableCell}>{getDataProfil.firstName}</Text>
             <TouchableOpacity onPress={() => openModal('firstName')}>
               <Icon name="angle-right" size={32} margin={5} />
             </TouchableOpacity>
           </View>
           <View style={styles.tableRow}>
             <Text style={styles.tableHeader}>Email</Text>
+            <Text style={styles.tableCell}>{getDataProfil.email}</Text>
             <TouchableOpacity onPress={() => openModal('email')}>
               <Icon name="angle-right" size={32} margin={5} />
             </TouchableOpacity>
@@ -72,27 +116,14 @@ export default function ProfilScreen() {
 
           <View style={styles.tableRow}>
             <Text style={styles.tableHeader}>Role</Text>
-            <Text style={styles.tableCell}>********</Text>
+            <Text style={styles.tableCell}>{getDataProfil.role}</Text>
           </View>
           <View style={styles.tableRow}>
             <Text style={styles.tableHeader}>Entreprise</Text>
-            <Text style={styles.tableCell}>********</Text>
+            <Text style={styles.tableCell}>{getDataProfil.company_name}</Text>
           </View>
         </View>
 
-        {/* <View style={styles.tableRow}>
-          <Text style={styles.tableHeader}>Avatar</Text>
-          <TouchableOpacity>
-          <Icon name='angle-right' size={32} margin={5} />
-         </TouchableOpacity>
-        </View> */}
-
-        {/* <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Modifier le Profil</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Changer le Mot de Passe</Text>
-      </TouchableOpacity> */}
         <EditFieldModal
           visible={modalVisible}
           onClose={closeModal}
