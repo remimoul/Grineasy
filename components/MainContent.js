@@ -66,7 +66,7 @@ export default function MainContent() {
           <View className="flex justify-center items-center mt-12">
             <Image source={require('../assets/woman.png')} />
           </View>
-          <TouchableOpacity className="rounded-xl p-2 mt-8" style={style.colorTurquoiseBack}>
+          <TouchableOpacity className="rounded-xl p-2 mt-8 bg-slate-500">
             <Text className="text-center ">Bientôt Disponible</Text>
           </TouchableOpacity>
         </View>
@@ -77,7 +77,7 @@ export default function MainContent() {
           <View className="flex justify-center items-center mt-12">
             <Image source={require('../assets/womanmedit.png')} />
           </View>
-          <TouchableOpacity className="rounded-xl p-2 mt-8" style={style.colorTurquoiseBack}>
+          <TouchableOpacity className="rounded-xl p-2 mt-8 bg-slate-500">
             <Text className="text-center ">Bientôt Disponible</Text>
           </TouchableOpacity>
         </View>
