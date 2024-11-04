@@ -67,7 +67,7 @@ export default function MainContent() {
             <Image source={require('../assets/woman.png')} />
           </View>
           <TouchableOpacity className="rounded-xl p-2 mt-8" style={style.colorTurquoiseBack}>
-            <Text className="text-center text-white">Bientôt Disponible</Text>
+            <Text className="text-center ">Bientôt Disponible</Text>
           </TouchableOpacity>
         </View>
 
@@ -78,26 +78,25 @@ export default function MainContent() {
             <Image source={require('../assets/womanmedit.png')} />
           </View>
           <TouchableOpacity className="rounded-xl p-2 mt-8" style={style.colorTurquoiseBack}>
-            <Text className="text-center text-white">Bientôt Disponible</Text>
+            <Text className="text-center ">Bientôt Disponible</Text>
           </TouchableOpacity>
         </View>
       </View>
 
       <View className="flex flex-col rounded-xl p-2 mx-3 mt-4 text-white" style={style.colorBlueBack}>
-  <Text className="text-center font-bold mb-2">Activités Sportive</Text>
-  
-  <View className="mb-4">
-    <Text className="text-center text-base mb-1">Pose de l'enfant</Text>
-    <View className="flex flex-row items-center mb-1">
-      <Text>• </Text>
-      <Text>Mets-toi à genoux sur le sol.</Text>
-    </View>
-    <View className="flex flex-row items-center mb-1">
-      <Text>• Penche-toi en avant en tendant tes bras devant toi et en posant ton front par terre. Respire profondément et détends-toi.</Text>
-    </View>
-  </View>
-</View>
+        <Text className="text-center font-bold mb-2">Activités Sportive</Text>
 
+        <View className="mb-4">
+          <Text className="text-center text-base mb-1">Pose de l'enfant</Text>
+          <View className="flex flex-row items-center mb-1">
+            <Text>• </Text>
+            <Text>Mets-toi à genoux sur le sol.</Text>
+          </View>
+          <View className="flex flex-row items-center mb-1">
+            <Text>• Penche-toi en avant en tendant tes bras devant toi et en posant ton front par terre. Respire profondément et détends-toi.</Text>
+          </View>
+        </View>
+      </View>
     </SafeAreaView>
   );
 }

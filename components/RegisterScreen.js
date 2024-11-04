@@ -147,7 +147,7 @@ export default function RegisterScreen() {
         </View>
       </View>
       <Image className="ml-6 mt-4 -z-10" source={require('../assets/Ellipse_b.png')} />
-     <Toast />
+      <Toast />
     </SafeAreaView>
   );
 }
