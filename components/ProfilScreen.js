@@ -38,7 +38,7 @@ export default function ProfilScreen() {
   };
   const { logout } = useContext(AuthContext);
 
-  useEffect(() => {
+
     const fetchProfileData = async () => {
       const tokenResponse = await SecureStore.getItemAsync('token');
       const { token } = JSON.parse(tokenResponse);
@@ -71,6 +71,7 @@ export default function ProfilScreen() {
       }
     };
 
+    useEffect(() => {
     fetchProfileData();
   }, []);
 
@@ -170,6 +171,7 @@ export default function ProfilScreen() {
           onClose={closeModal}
           field={currentField}
           value={fieldValue}
+          onUpdate={fetchProfileData}
           onChange={(value) => {
             setFieldValue(value);
             handleFieldChange(currentField, value);
