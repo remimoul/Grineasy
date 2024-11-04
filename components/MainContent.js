@@ -7,22 +7,6 @@ import { API_URL } from '@env';
 
 export default function MainContent() {
   const [userName, setUserName] = useState('');
-
-  // useEffect(() => {
-  //   const fetchToken = async () => {
-  //     const token = await SecureStore.getItemAsync('token');
-  //     if (token) {
-  //       // Ensure token is not null or undefined
-  //       const decoded = jwtDecode(token); // Now passing the actual token string
-  //       const name = decoded.firstName; // Obtenez le nom de l'utilisateur
-  //       setUserName(name); // Mettez à jour l'état avec le nom de l'utilisateur
-  //     }
-  //   };
-
-  //   fetchToken();
-  //   console.log('userName:', userName);
-  // }, [userName]);
-
   const fetchToken = async () => {
     const tokenResponse = await SecureStore.getItemAsync('token');
     // Parser la réponse pour obtenir le token en string
@@ -79,38 +63,41 @@ export default function MainContent() {
         <View className="w-1/2 rounded-xl p-2" style={style.colorBlueBack}>
           <Text className="text-center mt-5 font-bold">Analyse du sommeil</Text>
           <Text className="text-center text-lg font-bold mt-1">7h 30mn</Text>
-          <View className="flex justify-center items-center">
+          <View className="flex justify-center items-center mt-12">
             <Image source={require('../assets/woman.png')} />
           </View>
-          <TouchableOpacity className="rounded-xl p-2 mt-2" style={style.colorTurquoiseBack}>
+          <TouchableOpacity className="rounded-xl p-2 mt-8" style={style.colorTurquoiseBack}>
             <Text className="text-center text-white">Bientôt Disponible</Text>
           </TouchableOpacity>
         </View>
 
         <View className="w-1/2 rounded-xl p-2 ml-2" style={style.colorBlueBack}>
-          <Text className="text-center mt-5 font-bold ">Bien être & relaxation</Text>
+          <Text className="text-center mt-5 font-bold">Bien être & relaxation</Text>
 
-          <View className="flex justify-center items-center">
+          <View className="flex justify-center items-center mt-12">
             <Image source={require('../assets/womanmedit.png')} />
           </View>
-          <TouchableOpacity className="rounded-xl p-2 mt-2" style={style.colorTurquoiseBack}>
+          <TouchableOpacity className="rounded-xl p-2 mt-8" style={style.colorTurquoiseBack}>
             <Text className="text-center text-white">Bientôt Disponible</Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      <View className="flex flex-col rounded-xl p-2 mx-2 mt-2" style={style.colorBlueBack}>
-        <Text className="text-center font-bold ">Activités Sportive</Text>
-        <Text className="text-center mt-1 text-base mb-1">Pose de l'enfant</Text>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text>• </Text>
-          <Text>Mets-toi à genoux sur le sol.</Text>
-        </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text>• </Text>
-          <Text>Penche-toi en avant en tendant tes bras devant toi et en posant ton front par terre. Respire profondément et détends-toi.</Text>
-        </View>
-      </View>
+      <View className="flex flex-col rounded-xl p-2 mx-3 mt-4 text-white" style={style.colorBlueBack}>
+  <Text className="text-center font-bold mb-2">Activités Sportive</Text>
+  
+  <View className="mb-4">
+    <Text className="text-center text-base mb-1">Pose de l'enfant</Text>
+    <View className="flex flex-row items-center mb-1">
+      <Text>• </Text>
+      <Text>Mets-toi à genoux sur le sol.</Text>
+    </View>
+    <View className="flex flex-row items-center mb-1">
+      <Text>• Penche-toi en avant en tendant tes bras devant toi et en posant ton front par terre. Respire profondément et détends-toi.</Text>
+    </View>
+  </View>
+</View>
+
     </SafeAreaView>
   );
 }
