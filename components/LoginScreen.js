@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { View, Text, SafeAreaView, TextInput, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { AuthContext } from './AuthProvider';
 import style from '../style';
+import Toast from 'react-native-toast-message';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -44,6 +45,7 @@ export default function LoginScreen() {
         </View>
       </View>
       <Image className="ml-6 mt-4" source={require('../assets/Ellipse_b.png')} />
+      <Toast />
     </SafeAreaView>
   );
 }

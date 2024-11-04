@@ -3,6 +3,7 @@ import { View, Text, SafeAreaView, TextInput, TouchableOpacity, Image, Button, A
 import { useNavigation } from '@react-navigation/native';
 import style from '../style';
 import { API_URL } from '@env';
+import Toast from 'react-native-toast-message';
 
 export default function RegisterScreen() {
   const [showOptions, setShowOptions] = useState(false);
@@ -35,16 +36,38 @@ export default function RegisterScreen() {
       data = await response.json();
       if (!response.ok) {
         // Si la réponse n'est pas ok, lancez une erreur avec le message de l'API
-        throw new Error(data.message || "Une erreur est survenue lors de l'enregistrement.");
+        // throw new Error(data.message || "Une erreur est survenue lors de l'enregistrement.");
+        Toast.show({
+          type: 'error',
+          text1: "Erreur lors de l'inscription",
+          text2: data.message || "Une erreur est survenue lors de l'enregistrement.",
+          text1Style: { fontSize: 18 },
+          text2Style: { fontSize: 16 },
+          topOffset: 80,
+        });
+      } else {
+        Toast.show({
+          type: 'success',
+          text1: 'Inscription réussie',
+          text2: data.message || 'Inscription réussie ! Vous pouvez maintenant vous connecter.',
+          text1Style: { fontSize: 18 },
+          text2Style: { fontSize: 16 },
+          topOffset: 80,
+        });
+        setTimeout(() => {
+          navigation.navigate('HomeScreen');
+        }, 2000);
       }
-
-      // Si la réponse est ok, utilisez le message de succès de l'API ou un message par défaut
-      const successMsg = data.message || 'Inscription réussie ! Vous pouvez maintenant vous connecter.';
-      Alert.alert('Inscription réussie', successMsg, [
-        { text: 'OK', onPress: () => navigation.navigate('HomeScreen') }, // Utilisez navigation.navigate pour aller à la page d'accueil
-      ]);
     } catch (error) {
       console.error(error.message || "Erreur lors de la communication avec l'API.");
+      Toast.show({
+        type: 'error',
+        text1: "Erreur lors de la communication avec l'API",
+        text2: error.message || "Erreur lors de la communication avec l'API.",
+        text1Style: { fontSize: 18 },
+        text2Style: { fontSize: 16 },
+        topOffset: 80,
+      });
     }
   };
 
@@ -124,6 +147,7 @@ export default function RegisterScreen() {
         </View>
       </View>
       <Image className="ml-6 mt-4 -z-10" source={require('../assets/Ellipse_b.png')} />
+     <Toast />
     </SafeAreaView>
   );
 }

@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, SafeAreaView, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import React, { useContext, useState, useEffect } from 'react';
 import style from '../style';
 import { AuthContext } from './AuthProvider';
@@ -73,6 +73,47 @@ export default function ProfilScreen() {
 
     fetchProfileData();
   }, []);
+
+  const deleteAccount = async () => {
+    const tokenResponse = await SecureStore.getItemAsync('token');
+    const { token } = JSON.parse(tokenResponse);
+    const decoded = jwtDecode(tokenResponse);
+    const userId = decoded.id;
+
+    try {
+      const response = await fetch(`${API_URL}/user/delete/${userId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: token,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Account deleted:', data.message);
+        logout();
+      } else {
+        const errorData = await response.json();
+        Alert.alert(errorData.message);
+      }
+    } catch (error) {
+      console.error('An error occurred while deleting the account:', error.message);
+      Alert.alert(error.message);
+    }
+  };
+
+  const confirmDeleteAccount = () => {
+    Alert.alert(
+      'Confirmation',
+      'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.',
+      [
+        { text: 'Annuler', style: 'cancel' },
+        { text: 'Supprimer', onPress: deleteAccount },
+      ],
+      { cancelable: false },
+    );
+  };
   return (
     <SafeAreaView className="flex-1 items-center bg-white">
       <View className="flex flex-row items-center px-5">
@@ -135,7 +176,7 @@ export default function ProfilScreen() {
           }}
         />
         <View className="mt-64 bottom-0">
-          <TouchableOpacity>
+          <TouchableOpacity onPress={confirmDeleteAccount}>
             <Text className="text-center text-red-600">Supprimer mon compte</Text>
           </TouchableOpacity>
         </View>
