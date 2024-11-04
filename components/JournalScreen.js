@@ -7,7 +7,6 @@ import { jwtDecode } from 'jwt-decode';
 import Toast from 'react-native-toast-message';
 import { BarChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
 import { API_URL } from '@env';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -19,7 +18,6 @@ export default function JournalScreen() {
   const [showEmotions, setShowEmotions] = useState(false);
   const [selectedEmotion, setSelectedEmotion] = useState('');
   const [journal, setJournal] = useState([]);
-  const [bar, setBar] = useState([]);
   const emotions = ['Triste', 'En colère', 'Fatigué', 'Heureux', 'Déprimé'];
 
   const chartConfig = {
@@ -40,14 +38,6 @@ export default function JournalScreen() {
 
   const screenWidth = Dimensions.get('window').width;
 
-  const showToast = () => {
-    Toast.show({
-      type: 'success',
-      text1: 'Enregistrer👋',
-      topOffset: 80,
-    });
-  };
-
   const data = {
     labels: ['Triste', 'En colère', 'Fatigué', 'Heureux', 'Déprimé'], // Les émotions
     datasets: [
@@ -57,46 +47,55 @@ export default function JournalScreen() {
     ],
   };
 
-  useEffect(() => {
-    const fetchEmotions = async () => {
-      try {
-        const tokenResponse = await SecureStore.getItemAsync('token');
-        if (!tokenResponse) {
-          console.error('Token not found');
-          return;
-        }
-        // Parser la réponse pour obtenir le token en string
-        const { token } = JSON.parse(tokenResponse);
-        if (!token) {
-          console.error('Token property not found in response');
-          return;
-        }
-
-        // Décoder le token pour obtenir l'ID de l'utilisateur
-        const decoded = jwtDecode(tokenResponse); // Décoder le token
-        const user_id = decoded.id;
-
-        const response = await fetch(`${API_URL}/journal/get/${user_id}`, {
-          method: 'GET',
-          headers: {
-            Authorization: token,
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('Erreur lors de la récupération des émotions, Veuillez vous reconnecter Token Expiré');
-        }
-
-        const data = await response.json();
-        setJournal(data);
-        // const emotions = data.map((entry) => entry.emotion);
-        // console.log('Émotions récupérées:', emotions);
-        console.log('Journal:', data);
-      } catch (error) {
-        console.error(error.message);
+  const fetchEmotions = async () => {
+    try {
+      const tokenResponse = await SecureStore.getItemAsync('token');
+      if (!tokenResponse) {
+        console.error('Token not found');
+        return;
       }
-    };
+      // Parser la réponse pour obtenir le token en string
+      const { token } = JSON.parse(tokenResponse);
+      if (!token) {
+        console.error('Token property not found in response');
+        return;
+      }
+
+      // Décoder le token pour obtenir l'ID de l'utilisateur
+      const decoded = jwtDecode(tokenResponse); // Décoder le token
+      const user_id = decoded.id;
+
+      const response = await fetch(`${API_URL}/journal/get/${user_id}`, {
+        method: 'GET',
+        headers: {
+          Authorization: token,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        console.log('Erreur lors de la récupération des émotions');
+      }
+
+      const data = await response.json();
+      setJournal(data);
+      // const emotions = data.map((entry) => entry.emotion);
+      // console.log('Émotions récupérées:', emotions);
+      console.log('Journal:', data);
+    } catch (error) {
+      console.error(error.message);
+      Toast.show({
+        type: 'error',
+        text1: 'Erreur lors de la récupération des émotions',
+        text2: error.message,
+        text1Style: { fontSize: 12 },
+        text2Style: { fontSize: 12 },
+        topOffset: 80,
+      });
+    }
+  };
+
+  useEffect(() => {
     fetchEmotions();
   }, []);
 
@@ -112,7 +111,14 @@ export default function JournalScreen() {
       setSelectedEmotion(entries[day.dateString]?.emotion || '');
     } else {
       // Afficher un message d'erreur ou ne rien faire
-      console.error('Vous ne pouvez ajouter une émotion que pour le jour en cours.');
+      // console.error('Vous ne pouvez ajouter une émotion que pour le jour en cours.');
+      console.log('Vous ne pouvez ajouter une émotion que pour le jour en cours.');
+      Toast.show({
+        type: 'error',
+        text1: 'Ajouter une émotion pour le jour en cours.',
+        text1Style: { fontSize: 12 },
+        topOffset: 80,
+      });
     }
   };
 
@@ -165,11 +171,30 @@ export default function JournalScreen() {
         setEntries({ ...entries, [selectedDate]: selectedEmotion });
         setIsModalVisible(false);
         console.log('Entrée ajoutée avec succès');
+        Toast.show({
+          type: 'success',
+          text1: 'Entrée ajoutée avec succès ✨',
+          text1Style: { fontSize: 18 },
+          topOffset: 80,
+        });
+        fetchEmotions(); // Recharger les émotions après l'ajout
       } else {
-        console.error('An error occurred while saving the entry-1-');
+        console.error('An error occurred while saving the entry');
+        Toast.show({
+          type: 'error',
+          text1: "Erreur lors de l'enregistrement de l'entrée",
+        });
       }
     } catch (error) {
       console.error('An error occurred while saving the entry');
+      Toast.show({
+        type: 'error',
+        text1: "Erreur lors de l'enregistrement",
+        text2: error.message,
+        text1Style: { fontSize: 18 },
+        text2Style: { fontSize: 16 },
+        topOffset: 80,
+      });
     }
   };
 
@@ -197,7 +222,20 @@ export default function JournalScreen() {
       });
 
       if (!response.ok) {
-        throw new Error("Erreur lors de la suppression de l'entrée");
+        Toast.show({
+          type: 'error',
+          text1: "Erreur lors de la suppression de l'entrée",
+          text1Style: { fontSize: 18 },
+          text2Style: { fontSize: 16 },
+          topOffset: 80,
+        });
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: 'Entrée supprimée avec succès 🚀',
+          text1Style: { fontSize: 12 },
+          topOffset: 80,
+        });
       }
 
       // Mettre à jour l'état du journal après la suppression
@@ -205,8 +243,23 @@ export default function JournalScreen() {
         ...prevJournal,
         data: prevJournal.data.filter((entry) => entry.id !== id),
       }));
+      Toast.show({
+        type: 'error',
+        text1: 'Entrée supprimée avec succès ✨',
+        text1Style: { fontSize: 12 },
+        topOffset: 80,
+      });
+      fetchEmotions(); // Recharger les émotions après la suppression
     } catch (error) {
       console.error(error.message);
+      Toast.show({
+        type: 'error',
+        text1: "Erreur lors de la suppression de l'entrée",
+        text2: error.message,
+        text1Style: { fontSize: 12 },
+        text2Style: { fontSize: 12 },
+        topOffset: 80,
+      });
     }
   };
 
@@ -328,7 +381,6 @@ export default function JournalScreen() {
             <TouchableOpacity
               onPress={() => {
                 saveEntry();
-                showToast();
               }}
               className="mt-4 p-3 rounded-lg"
               style={{ backgroundColor: '#53BECA' }}

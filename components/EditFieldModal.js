@@ -3,8 +3,9 @@ import { View, Text, Modal, TextInput, SafeAreaView, Alert, TouchableOpacity } f
 import { API_URL } from '@env';
 import { jwtDecode } from 'jwt-decode';
 import * as SecureStore from 'expo-secure-store';
+import Toast from 'react-native-toast-message';
 
-const EditFieldModal = ({ visible, onClose, field, value, onChange }) => {
+const EditFieldModal = ({ visible, onClose, field, value, onChange, onUpdate }) => {
   const [fieldValue, setFieldValue] = useState(value);
   const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -14,7 +15,12 @@ const EditFieldModal = ({ visible, onClose, field, value, onChange }) => {
 
   const updateUser = async () => {
     if (field === 'password' && fieldValue !== confirmPassword) {
-      Alert.alert('Error', 'Passwords do not match');
+      // Alert.alert('Error', 'Passwords do not match');
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Passwords do not match',
+      });
       return;
     }
     const tokenResponse = await SecureStore.getItemAsync('token');
@@ -34,15 +40,31 @@ const EditFieldModal = ({ visible, onClose, field, value, onChange }) => {
       if (response.ok) {
         const data = await response.json();
         onChange(fieldValue);
-        Alert.alert('Success', 'Update successful: ' + data.message);
+        // Alert.alert('Success', 'Update successful: ' + data.message);
+        Toast.show({
+          type: 'success',
+          text1: data.message + ' 🚀',
+          text1Style: { fontWeight: 'bold', fontSize: 16 },
+        });
+        onUpdate();
         onClose();
       } else {
         const errorData = await response.json();
-        Alert.alert('Error', 'Update failed: ' + errorData.message);
+        // Alert.alert('Error', 'Update failed: ' + errorData.message);
+        Toast.show({
+          type: 'error',
+          text1: 'Veuillez remplir tous les champs 😒',
+          text1Style: { fontWeight: 'bold', fontSize: 16 },
+        });
       }
     } catch (error) {
-      console.error(error);
-      Alert.alert('Error', 'An error occurred: ' + error.message);
+      // console.error(error);
+      // Alert.alert('Error', 'An error occurred: ' + error.message);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'An error occurred: ' + error.message,
+      });
     }
   };
 
@@ -78,6 +100,7 @@ const EditFieldModal = ({ visible, onClose, field, value, onChange }) => {
           </TouchableOpacity>
         </View>
       </Modal>
+      <Toast />
     </SafeAreaView>
   );
 };
