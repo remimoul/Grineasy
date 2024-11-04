@@ -5,26 +5,40 @@ import { AuthContext } from './AuthProvider';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import EditFieldModal from './EditFieldModal';
 
+
+
 export default function ProfilScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [currentField, setCurrentField] = useState('');
   const [fieldValue, setFieldValue] = useState('');
-
-  const openModal = (field, value) => {
+  const [profileData, setProfileData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+  });
+  const openModal = (field) => {
     setCurrentField(field);
-    setFieldValue(value);
+    setFieldValue(profileData[field]);
     setModalVisible(true);
   };
 
   const closeModal = () => {
     setModalVisible(false);
   };
+
+  const handleFieldChange = (field, value) => {
+    setProfileData((prevData) => ({
+      ...prevData,
+      [field]: value,
+    }));
+  };
   const { logout } = useContext(AuthContext);
   return (
     <SafeAreaView className="flex-1 items-center bg-white">
       <View className="flex flex-row items-center px-5">
       <Text className="px-7" style={[{ fontSize: 35, fontWeight: 'bold' }, style.colorTurquoise]}>Profil</Text>
-      <TouchableOpacity className="rounded-xl p-2" style={style.colorBlueBack}>
+      <TouchableOpacity className="rounded-xl p-2" style={style.colorBlueBack} onPress={logout}>
             <Text className="text-center text-white">Déconnexion</Text>
           </TouchableOpacity>
       </View>
@@ -34,25 +48,25 @@ export default function ProfilScreen() {
       <View className="mt-5">
         <View style={styles.tableRow}>
           <Text style={styles.tableHeader}>Nom</Text>
-         <TouchableOpacity>
+         <TouchableOpacity onPress={()=> openModal('lastName')}>
           <Icon name='angle-right' size={32} margin={5} />
          </TouchableOpacity>
         </View>
         <View style={styles.tableRow}>
           <Text style={styles.tableHeader}>Prénom</Text>
-         <TouchableOpacity>
+         <TouchableOpacity onPress={()=> openModal('firstName')}>
           <Icon name='angle-right' size={32} margin={5} />
          </TouchableOpacity>
         </View>
         <View style={styles.tableRow}>
           <Text style={styles.tableHeader}>Email</Text>
-          <TouchableOpacity onPress={()=> openModal('email', '')}>
+          <TouchableOpacity onPress={()=> openModal('email')}>
           <Icon name='angle-right' size={32} margin={5} />
          </TouchableOpacity>
         </View>
         <View style={styles.tableRow}>
           <Text style={styles.tableHeader}>Password</Text>
-          <TouchableOpacity onPress={()=> openModal('le mot de passe', '')}>
+          <TouchableOpacity onPress={()=> openModal('password')}>
           <Icon name='angle-right' size={32} margin={5} />
          </TouchableOpacity>
         </View>
@@ -81,12 +95,15 @@ export default function ProfilScreen() {
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Changer le Mot de Passe</Text>
       </TouchableOpacity> */}
-            <EditFieldModal
+      <EditFieldModal
         visible={modalVisible}
         onClose={closeModal}
         field={currentField}
         value={fieldValue}
-        onChange={setFieldValue}
+        onChange={(value) => {
+          setFieldValue(value);
+          handleFieldChange(currentField, value);
+        }}
       />
 <View className="mt-64 bottom-0"> 
   <TouchableOpacity>
